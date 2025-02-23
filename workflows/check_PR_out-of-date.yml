@@ -1,0 +1,42 @@
+name: Check Outdated PRs and Comment
+
+on:
+  schedule:
+    - cron: "5 0 * * *"
+  workflow_dispatch:
+
+jobs:
+  check-outdated-prs:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check PR status and comment for outdated branches
+        env:
+          ORG: "D-stats"
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          echo "Getting repository list for organization ${ORG}..."
+          repos=$(gh repo list $ORG --json name -q '.[].name')
+
+          for repo in $repos; do
+            echo "Checking $ORG/$repo..."
+            pr_list=$(gh pr list -R "$ORG/$repo" --state open --json number,mergeStateStatus,assignees)
+            echo "$pr_list" | jq -c '.[]' | while read -r pr; do
+              pr_number=$(echo "$pr" | jq -r '.number')
+              mergeStateStatus=$(echo "$pr" | jq -r '.mergeStateStatus')
+              echo "PR #$pr_number mergeStateStatus: $mergeStateStatus"
+
+              if [ "$mergeStateStatus" = "BEHIND" ]; then
+                assignees=$(echo "$pr" | jq -r '.assignees[].login' | xargs)
+                if [ -n "$assignees" ]; then
+                  mentions=$(echo "$assignees" | sed 's/ / @/g')
+                  mentions="@${mentions}"
+                else
+                  mentions=""
+                fi
+
+                comment_body="${mentions}\n:warning: This PR is in the behind state on the base branch.\nPlease update branch."
+                echo "コメント投稿: PR #$pr_number, メンション: ${mentions}"
+                gh pr comment -R "$ORG/$repo" $pr_number --body "$comment_body"
+              fi
+            done
+          done
