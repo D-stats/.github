@@ -39,5 +39,6 @@
 - [ ] 資料なし
 
 ## README更新
-- [ ] 必要
+- [ ] 必要 (→ [参考手順](https://d-stats.atlassian.net/wiki/spaces/DEV/pages/5493882926/README+LLM))
 - [ ] 必要なし
+
