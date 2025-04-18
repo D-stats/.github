@@ -33,12 +33,11 @@
 
 ## ノウハウ共有
 <!-- タスクに用いたConfluence資料があれば掲載する。 -->
-[URL](<!-- URLを載せる -->)
+[<!-- 資料タイトル -->](<!-- URLを載せる -->)
 - [ ] 既存資料
 - [ ] 新規・更新資料
 - [ ] 資料なし
 
 ## README更新
-- [ ] 必要 (→ [参考手順](https://d-stats.atlassian.net/wiki/spaces/DEV/pages/5493882926/README+LLM))
+- [ ] 必要 (→ [READMEの更新をLLMですぐに完了する方法](https://d-stats.atlassian.net/wiki/spaces/DEV/pages/5493882926/README+LLM))
 - [ ] 必要なし
-
